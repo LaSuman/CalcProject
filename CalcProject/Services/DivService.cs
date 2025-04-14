@@ -6,6 +6,11 @@ namespace CalculatorProject.Services
     {
         public double Calculate(CalculatorRequest calculatorRequest)
         {
+            if (calculatorRequest.Maths.Operation == null)
+                throw new NullReferenceException();
+
+            if (calculatorRequest.Maths.Operation.ID != nameof(Operator.Division))
+                throw new InvalidOperationException();
             double div = Calculate(calculatorRequest.Maths.Operation);
             return div;
         }
@@ -16,7 +21,7 @@ namespace CalculatorProject.Services
 
             for (int i = 1; i < calculatorRequest.Value.Count; i++)
             {
-                var value = Int32.Parse(calculatorRequest.Value[i]);
+                var value = double.Parse(calculatorRequest.Value[i]);
                 div /= value;
             }
 
