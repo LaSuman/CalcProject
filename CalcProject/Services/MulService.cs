@@ -6,12 +6,35 @@ namespace CalculatorProject.Services
     {
         public double Calculate(CalculatorRequest calculatorRequest)
         {
-            int mul = Int32.Parse(calculatorRequest.Maths.Operation.Value[0]);
-            for (int i = 1; i < calculatorRequest.Maths.Operation.Value.Count; i++)
+            double mul = Calculate(calculatorRequest.Maths.Operation);
+            return mul;
+        }
+
+
+        public double Calculate(Operation calculatorRequest)
+        {
+            double mul = double.Parse(calculatorRequest.Value[0]);
+
+            for (int i = 1; i < calculatorRequest.Value.Count; i++)
             {
-                var Value = Int32.Parse(calculatorRequest.Maths.Operation.Value[i]);
-                mul *= Value;
+                var value = Int32.Parse(calculatorRequest.Value[i]);
+                mul *= value;
             }
+
+            // Handle nested calculation, if present.
+            if (calculatorRequest.NestedOperation != null)
+            {
+                var nextedResult = calculatorRequest.NestedOperation.ID switch
+                {
+                    nameof(Operator.Plus) => new AddService().Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                mul += nextedResult;
+            }
+
             return mul;
         }
     }
