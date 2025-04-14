@@ -1,4 +1,5 @@
 ﻿using CalculatorProject.Models;
+using CalculatorProject.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CalculatorProject.Controllers
@@ -13,6 +14,15 @@ namespace CalculatorProject.Controllers
         {
             try
             {
+                var result = request.Maths?.Operation?.ID switch
+                {
+                    nameof(Operator.Plus) => new AddService().Calculate(request),
+                    nameof(Operator.Subtraction) => new SubService().Calculate(request),
+                    nameof(Operator.Multiplication) => new MulService().Calculate(request),
+                    nameof(Operator.Division) => new DivService().Calculate(request),
+
+                    _ => throw new InvalidOperationException("Invalid operation")
+                };
 
                 return Ok();
             }
