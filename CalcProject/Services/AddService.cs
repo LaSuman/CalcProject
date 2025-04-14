@@ -6,10 +6,10 @@ namespace CalculatorProject.Services
     {
         public double Calculate(CalculatorRequest calculatorRequest)
         {
-            int sum = 0;
+            double sum = 0;
             foreach (var num in calculatorRequest.Maths.Operation.Value)
             {
-                var Value = int.Parse(num);
+                var Value = double.Parse(num);
                 sum += Value;
             }
 
