@@ -13,7 +13,7 @@ namespace CalculatorProject.Models
             {
                 Maths = new Maths
                 {
-                    Operation = ConvertOperation(xml.Maths?.Operation)
+                    Operation = ConvertOperation(xml.Maths?.NestedOperation)
                 }
             };
         }

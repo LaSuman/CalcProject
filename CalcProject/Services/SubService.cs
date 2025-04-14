@@ -17,6 +17,9 @@ namespace CalculatorProject.Services
 
         public double Calculate(Operation calculatorRequest)
         {
+            if (calculatorRequest.Value.Count == 0)
+                throw new ArgumentException("Subtraction requires at least two values.");
+
             double sub = double.Parse(calculatorRequest.Value[0]);
 
             for (int i = 1; i < calculatorRequest.Value.Count; i++)

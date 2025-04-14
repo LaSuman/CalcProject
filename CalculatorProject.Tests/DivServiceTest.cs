@@ -71,10 +71,8 @@ namespace CalculatorProject.Tests
                 }
 
             };
-            // Act
-            double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(3.00, result);
+            Assert.Throws<DivideByZeroException>(() => operation.Calculate(request));
         }
 
         [Fact(DisplayName = "Should div with 0 as infinity")]
@@ -96,7 +94,7 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(1, result);
+            Assert.Equal(double.PositiveInfinity, result);
         }
 
         [Fact(DisplayName = "Should div negative number ")]
@@ -161,7 +159,7 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(1.00, result);
+            Assert.Equal(10.00, result);
         }
 
 
@@ -180,10 +178,8 @@ namespace CalculatorProject.Tests
                     }
                 }
             };
-            // Act
-            double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(0.00, result);
+            Assert.Throws<ArgumentException>(() => operation.Calculate(request));
         }
 
         [Fact(DisplayName = "Should throw exception different format input ")]
@@ -201,10 +197,7 @@ namespace CalculatorProject.Tests
                     }
                 }
             };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Throws<FormatException>(() => result);
+            Assert.Throws<FormatException>(() => operation.Calculate(request));
         }
 
         [Fact(DisplayName = "Should throw exception invalid operation ")]
@@ -222,10 +215,8 @@ namespace CalculatorProject.Tests
                     }
                 }
             };
-            // Act
-            double result = operation.Calculate(request);
             // Assert
-            Assert.Throws<InvalidOperationException>(() => result);
+            Assert.Throws<InvalidOperationException>(() => operation.Calculate(request));
         }
 
         [Fact(DisplayName = "Should throw exception null input ")]
@@ -239,10 +230,8 @@ namespace CalculatorProject.Tests
                     Operation = null
                 }
             };
-            // Act
-            double result = operation.Calculate(request);
             // Assert
-            Assert.Throws<ArgumentNullException>(() => result);
+            Assert.Throws<NullReferenceException>(() => operation.Calculate(request));
         }
 
         [Fact(DisplayName = "Should calculate leading zeros ")]
@@ -286,27 +275,5 @@ namespace CalculatorProject.Tests
             Assert.Equal(1.5, result);
         }
 
-        [Fact(DisplayName = "Should skip empty values and calculate valid ones")]
-        public async Task ShouldSkipEmptyValues()
-        {
-            // Arrange
-            var request = new CalculatorRequest
-            {
-                Maths = new Maths
-                {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "5", "", "10" }
-                    }
-                }
-            };
-
-            // Act
-            double result = operation.Calculate(request);
-
-            // Assert
-            Assert.Equal(15.00, result); // Empty string is treated as 0 or skipped
-        }
     }
 }

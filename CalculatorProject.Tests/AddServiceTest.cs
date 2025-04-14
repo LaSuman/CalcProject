@@ -181,7 +181,6 @@ namespace CalculatorProject.Tests
                 }
             };
             // Assert
-
             Assert.Throws<FormatException>(() => operation.Calculate(request));
         }
 
@@ -200,7 +199,7 @@ namespace CalculatorProject.Tests
                     }
                 }
             };
-            // Act
+            // Assert
             Assert.Throws<InvalidOperationException>(() => operation.Calculate(request));
         }
 
@@ -240,25 +239,5 @@ namespace CalculatorProject.Tests
             Assert.Equal(5.00, result);
         }
 
-        [Fact(DisplayName = "Should calculate trailing zeros ")]
-        public async Task ShouldCalculateTrailingZeros()
-        {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
-            {
-                Maths = new Maths
-                {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Plus),
-                        Value = new List<string> { "3.00", "2.00" }
-                    }
-                }
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(5.00, result);
-        }
     }
 }

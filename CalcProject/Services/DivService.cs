@@ -17,13 +17,20 @@ namespace CalculatorProject.Services
 
         public double Calculate(Operation calculatorRequest)
         {
+            if (calculatorRequest.Value.Count == 0)
+                throw new ArgumentException("Division requires at least two values.");
             double div = double.Parse(calculatorRequest.Value[0]);
+            if (div == 0)
+                throw new DivideByZeroException("Cannot divide by zero.");
 
             for (int i = 1; i < calculatorRequest.Value.Count; i++)
             {
                 var value = double.Parse(calculatorRequest.Value[i]);
                 div /= value;
             }
+            if (calculatorRequest.Value.Count == 1)
+                throw new DivideByZeroException("Cannot divide by zero.");
+
 
             // Handle nested calculation, if present.
             if (calculatorRequest.NestedOperation != null)

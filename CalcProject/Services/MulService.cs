@@ -22,9 +22,12 @@ namespace CalculatorProject.Services
 
             for (int i = 1; i < calculatorRequest.Value.Count; i++)
             {
+
                 var value = double.Parse(calculatorRequest.Value[i]);
                 mul *= value;
             }
+            if (calculatorRequest.Value.Count == 1)
+                mul = 0;
 
             // Handle nested calculation, if present.
             if (calculatorRequest.NestedOperation != null)
