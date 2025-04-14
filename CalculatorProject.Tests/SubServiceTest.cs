@@ -10,7 +10,7 @@ namespace CalculatorProject.Tests
 
         public SubServiceTest()
         {
-            operation = new AddService();
+            operation = new SubService();
         }
 
         [Fact(DisplayName = "Should sub two valid number")]
@@ -24,7 +24,7 @@ namespace CalculatorProject.Tests
                     Operation = new Operation
                     {
                         ID = nameof(Operator.Subtraction),
-                        Value = new List<string> { "2", "3" }
+                        Value = new List<string> { "3", "2" }
                     }
                 }
 
@@ -32,11 +32,11 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(5.00, result);
+            Assert.Equal(1.00, result);
         }
 
-        [Fact(DisplayName = "Should add One valid number ")]
-        public async Task ShouldAddOneValidNumber()
+        [Fact(DisplayName = "Should sub One valid number ")]
+        public async Task ShouldSubOneValidNumber()
         {
             // Arrange
             CalculatorRequest request = new CalculatorRequest
@@ -57,8 +57,8 @@ namespace CalculatorProject.Tests
             Assert.Equal(3.00, result);
         }
 
-        [Fact(DisplayName = "Should add with 0")]
-        public async Task ShouldAddWith0()
+        [Fact(DisplayName = "Should sub with 0")]
+        public async Task ShouldsubWith0()
         {
             // Arrange
             CalculatorRequest request = new CalculatorRequest
@@ -79,8 +79,8 @@ namespace CalculatorProject.Tests
             Assert.Equal(6.00, result);
         }
 
-        [Fact(DisplayName = "Should add negative number ")]
-        public async Task ShouldAddNegativeNumber()
+        [Fact(DisplayName = "Should sub negative number ")]
+        public async Task ShouldSubNegativeNumber()
         {
             // Arrange
             CalculatorRequest request = new CalculatorRequest
@@ -98,7 +98,7 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(-13.00, result);
+            Assert.Equal(7.00, result);
         }
 
         [Fact(DisplayName = "Should handle large number ")]
@@ -112,7 +112,7 @@ namespace CalculatorProject.Tests
                     Operation = new Operation
                     {
                         ID = nameof(Operator.Subtraction),
-                        Value = new List<string> { "30000000", "1000000" }
+                        Value = new List<string> { "3000000", "1000000" }
                     }
                 }
 
@@ -120,7 +120,7 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(31000000.00, result);
+            Assert.Equal(2000000.00, result);
         }
 
         [Fact(DisplayName = "Should handle decimal number ")]
@@ -141,7 +141,7 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(6.00, result);
+            Assert.Equal(1.00, result);
         }
 
 
@@ -243,7 +243,7 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(5.00, result);
+            Assert.Equal(1.00, result);
         }
         [Fact(DisplayName = "Should calculate trailing zeros ")]
         public async Task ShouldCalculateTrailingZeros()
@@ -263,7 +263,7 @@ namespace CalculatorProject.Tests
             // Act
             double result = operation.Calculate(request);
             // Assert
-            Assert.Equal(5.00, result);
+            Assert.Equal(1.00, result);
         }
 
         [Fact(DisplayName = "Should skip empty values and calculate valid ones")]
