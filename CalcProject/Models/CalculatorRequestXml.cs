@@ -6,7 +6,12 @@ namespace CalculatorProject.Models
     public class CalculatorRequestXml
     {
         [XmlElement("MyOperation")]
-        public OperationXml Maths { get; set; }
+        public MathsXml? Maths { get; set; }
+    }
+    public class MathsXml
+    {
+        [XmlElement("MyOperation")]
+        public OperationXml? Operation { get; set; }
     }
 
     public class OperationXml
@@ -15,7 +20,7 @@ namespace CalculatorProject.Models
         public string ID { get; set; }
 
         [XmlElement("Value")]
-        public List<string> Value { get; set; }
+        public List<string>? Value { get; set; }
 
         [XmlElement("MyOperation")]
         public OperationXml? NestedOperation { get; set; }
