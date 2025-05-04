@@ -9,7 +9,7 @@ namespace CalculatorProject.Models
 
         public List<string>? Value { get; set; }
 
-        [JsonPropertyName("Operation")]
+        [JsonPropertyName("MyOperation")]
         public Operation? NestedOperation { get; set; }
 
     }
