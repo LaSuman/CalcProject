@@ -10,6 +10,7 @@ public class CalculatorController : ControllerBase
 {
     [HttpPost()]
     [Route("CalculateJSON")]
+    [Produces("application/json")]
     public IActionResult CalculateJSON([FromBody] CalculatorRequest request)
     {
         try
@@ -23,11 +24,21 @@ public class CalculatorController : ControllerBase
                 nameof(Operator.Division) => new DivService().Calculate(request),
                 _ => throw new ArgumentOutOfRangeException()
             };
-            return Ok(result);
+            return Ok(new CustomResponse
+            { 
+                Success = true,
+                Message = $"Operation successful.",
+                Result = result
+            });
         }
         catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(new CustomResponse
+            {
+                Success = false,
+                Message = "Invalid operation request.",
+                Result = 0
+            });
         }
     }
 
@@ -35,18 +46,36 @@ public class CalculatorController : ControllerBase
     [HttpPost()]
     [Route("CalculateXML")]
     [Consumes("application/xml")]
+    [Produces("application/xml")]
     public async Task<IActionResult> CalculateXML([FromBody] CalculatorRequestXml xmlRequest)
     {
-        var request = xmlRequest.ToCalculatorRequest();
-        var op = request.Maths?.Operation;
-        var result = op.ID switch
+        try
         {
-            nameof(Operator.Plus) => new AddService().Calculate(request),
-            nameof(Operator.Subtraction) => new SubService().Calculate(request),
-            nameof(Operator.Multiplication) => new MulService().Calculate(request),
-            nameof(Operator.Division) => new DivService().Calculate(request),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        return Ok(result);
+            var request = xmlRequest.ToCalculatorRequest();
+            var op = request.Maths?.Operation;
+            var result = op.ID switch
+            {
+                nameof(Operator.Plus) => new AddService().Calculate(request),
+                nameof(Operator.Subtraction) => new SubService().Calculate(request),
+                nameof(Operator.Multiplication) => new MulService().Calculate(request),
+                nameof(Operator.Division) => new DivService().Calculate(request),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            return Ok(new CustomResponse
+            {
+                Success = true,
+                Message = $"Operation successful.",
+                Result = result
+            });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new CustomResponse
+            {
+                Success = false,
+                Message = "Invalid operation request.",
+                Result = 0
+            });
+        }
     }
 }
