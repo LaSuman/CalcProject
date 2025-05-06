@@ -1,3 +1,4 @@
+using CalculatorProject.Middleware;
 using CalculatorProject.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+//Added middleware to handle xml requests
+app.UseMiddleware<XmlTagMappingMiddleware>();
 app.MapControllers();
 
 app.Run();
