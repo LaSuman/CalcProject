@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CalculatorProject.Middleware ;
+namespace CalculatorProject.Middleware;
 
 
 public class XmlTagMappingMiddleware(RequestDelegate next)

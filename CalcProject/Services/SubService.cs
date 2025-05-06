@@ -6,7 +6,7 @@ namespace CalculatorProject.Services
     {
         public double Calculate(CalculatorRequest calculatorRequest)
         {
-            if (calculatorRequest.Maths.Operation == null)
+            if (calculatorRequest.Maths?.Operation == null)
                 throw new NullReferenceException();
 
             if (calculatorRequest.Maths.Operation.ID != nameof(Operator.Subtraction))
@@ -17,10 +17,10 @@ namespace CalculatorProject.Services
 
         public double Calculate(Operation calculatorRequest)
         {
-            if (calculatorRequest.Value.Count == 0)
+            if (calculatorRequest.Value is { Count: 0 })
                 throw new ArgumentException("Subtraction requires at least two values.");
 
-            double sub = double.Parse(calculatorRequest.Value[0]);
+            var sub = double.Parse(calculatorRequest.Value[0]);
 
             for (int i = 1; i < calculatorRequest.Value.Count; i++)
             {
@@ -31,7 +31,7 @@ namespace CalculatorProject.Services
             // Handle nested calculation, if present.
             if (calculatorRequest.NestedOperation != null)
             {
-                var nextedResult = calculatorRequest.NestedOperation.ID switch
+                var nestedResult = calculatorRequest.NestedOperation.ID switch
                 {
                     nameof(Operator.Plus) => new AddService().Calculate(calculatorRequest.NestedOperation),
                     nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
@@ -39,7 +39,7 @@ namespace CalculatorProject.Services
                     nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
                     _ => throw new ArgumentOutOfRangeException()
                 };
-                sub += nextedResult;
+                sub += nestedResult;
             }
 
             return sub;

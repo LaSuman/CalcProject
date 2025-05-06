@@ -1,10 +1,10 @@
-﻿namespace CalculatorProject.Models
+﻿namespace CalculatorProject.Models;
+
+public enum Operator
 {
-    public enum Operator
-    {
-        Plus,
-        Subtraction,
-        Multiplication,
-        Division
-    }
+    Plus,
+    Subtraction,
+    Multiplication,
+    Division
 }
+

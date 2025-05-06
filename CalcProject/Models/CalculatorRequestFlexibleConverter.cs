@@ -13,8 +13,7 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
         var result = new CalculatorRequest();
 
         // Try to find either "MyMaths" or "Maths"
-        JsonElement mathsElement;
-        if (root.TryGetProperty("MyMaths", out mathsElement) || root.TryGetProperty("Maths", out mathsElement))
+        if (root.TryGetProperty("MyMaths", out var mathsElement) || root.TryGetProperty("Maths", out mathsElement))
         {
             result.Maths = new Maths();
 

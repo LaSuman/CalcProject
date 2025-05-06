@@ -1,16 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CalculatorProject.Models
+namespace CalculatorProject.Models;
+
+public class Operation
 {
-    public class Operation
-    {
-        [JsonPropertyName("@ID")]
-        public string? ID { get; set; }
+    [JsonPropertyName("@ID")]
+    public string? ID { get; set; }
 
-        public List<string>? Value { get; set; }
+    public List<string> Value { get; set; }
 
-        [JsonPropertyName("MyOperation")]
-        public Operation? NestedOperation { get; set; }
+    [JsonPropertyName("MyOperation")]
+    public Operation? NestedOperation { get; set; }
 
-    }
 }

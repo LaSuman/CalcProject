@@ -6,7 +6,7 @@ namespace CalculatorProject.Services
     {
         public double Calculate(CalculatorRequest calculatorRequest)
         {
-            if (calculatorRequest.Maths.Operation == null)
+            if (calculatorRequest.Maths?.Operation == null)
                 throw new NullReferenceException();
 
             if (calculatorRequest.Maths.Operation.ID != nameof(Operator.Division))
@@ -17,15 +17,15 @@ namespace CalculatorProject.Services
 
         public double Calculate(Operation calculatorRequest)
         {
-            if (calculatorRequest.Value.Count == 0)
+            if (calculatorRequest.Value is { Count: 0 })
                 throw new ArgumentException("Division requires at least two values.");
-            double div = double.Parse(calculatorRequest.Value[0]);
+            var div = double.Parse(calculatorRequest.Value[0]);
             if (div == 0)
                 throw new DivideByZeroException("Cannot divide by zero.");
 
-            for (int i = 1; i < calculatorRequest.Value.Count; i++)
+            for (var i = 1; i < calculatorRequest.Value.Count; i++)
             {
-                var value = double.Parse(calculatorRequest.Value[i]);
+                var value = double.Parse(calculatorRequest.Value[i] ?? string.Empty);
                 div /= value;
             }
             if (calculatorRequest.Value.Count == 1)
@@ -33,18 +33,16 @@ namespace CalculatorProject.Services
 
 
             // Handle nested calculation, if present.
-            if (calculatorRequest.NestedOperation != null)
+            if (calculatorRequest.NestedOperation == null) return div;
+            var nestedResult = calculatorRequest.NestedOperation.ID switch
             {
-                var nextedResult = calculatorRequest.NestedOperation.ID switch
-                {
-                    nameof(Operator.Plus) => new AddService().Calculate(calculatorRequest.NestedOperation),
-                    nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
-                    nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
-                    nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-                div += nextedResult;
-            }
+                nameof(Operator.Plus) => new AddService().Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            div += nestedResult;
 
             return div;
         }

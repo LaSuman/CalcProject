@@ -1,279 +1,272 @@
 ﻿using CalculatorProject.Models;
 using CalculatorProject.Services;
 
-namespace CalculatorProject.Tests
+namespace CalculatorProject.Tests;
+
+public class DivServiceTest
 {
-    public class DivServiceTest
+    private readonly IOperation _operation = new DivService();
+
+    [Fact(DisplayName = "Should return 2 when divide 6 by 3")]
+    public async Task ShouldRetun2WhenDivide6By3()
     {
-        private IOperation operation;
-
-        public DivServiceTest()
+        // Arrange
+        var request = new CalculatorRequest
         {
-            operation = new DivService();
-        }
-
-        [Fact(DisplayName = "Should return 2 when divide 6 by 3")]
-        public async Task ShouldRetun2WhenDivide6By3()
-        {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = ["6", "3"]
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = ["6", "3"]
                 }
-            };
+            }
+        };
 
-            // Act
-            var result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(2.0, result);
-        }
-        [Fact(DisplayName = "Should div two valid number")]
-        public async Task ShouldDivTwoValidNumber()
+        // Act
+        var result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(2.0, result);
+    }
+    [Fact(DisplayName = "Should div two valid number")]
+    public async Task ShouldDivTwoValidNumber()
+    {
+        // Arrange
+        CalculatorRequest request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "6", "2" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "6", "2" }
                 }
+            }
 
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(3.00, result);
-        }
+        };
+        // Act
+        double result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(3.00, result);
+    }
 
-        [Fact(DisplayName = "Should Error for One input ")]
-        public async Task ShouldErrorForOneInput()
+    [Fact(DisplayName = "Should Error for One input ")]
+    public async Task ShouldErrorForOneInput()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "3" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "3" }
                 }
+            }
 
-            };
-            // Assert
-            Assert.Throws<DivideByZeroException>(() => operation.Calculate(request));
-        }
+        };
+        // Assert
+        Assert.Throws<DivideByZeroException>(() => _operation.Calculate(request));
+    }
 
-        [Fact(DisplayName = "Should div with 0 as infinity")]
-        public async Task ShoulddivWith0AsInfinity()
+    [Fact(DisplayName = "Should div with 0 as infinity")]
+    public async Task ShoulddivWith0AsInfinity()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "6", "0" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "6", "0" }
                 }
+            }
 
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(double.PositiveInfinity, result);
-        }
+        };
+        // Act
+        double result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(double.PositiveInfinity, result);
+    }
 
-        [Fact(DisplayName = "Should div negative number ")]
-        public async Task ShouldDivNegativeNumber()
+    [Fact(DisplayName = "Should div negative number ")]
+    public async Task ShouldDivNegativeNumber()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "-30", "-3" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "-30", "-3" }
                 }
+            }
 
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(10.00, result);
-        }
+        };
+        // Act
+        double result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(10.00, result);
+    }
 
-        [Fact(DisplayName = "Should handle large number ")]
-        public async Task ShouldHandleLargeNumber()
+    [Fact(DisplayName = "Should handle large number ")]
+    public async Task ShouldHandleLargeNumber()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "3000000", "1000000" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "3000000", "1000000" }
                 }
+            }
 
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(3, result);
-        }
+        };
+        // Act
+        double result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(3, result);
+    }
 
-        [Fact(DisplayName = "Should handle decimal number ")]
-        public async Task ShouldHandleDecimalNumber()
+    [Fact(DisplayName = "Should handle decimal number ")]
+    public async Task ShouldHandleDecimalNumber()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "15.0", "1.5" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "15.0", "1.5" }
                 }
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(10.00, result);
-        }
+            }
+        };
+        // Act
+        double result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(10.00, result);
+    }
 
 
-        [Fact(DisplayName = "Should handle empty input ")]
-        public async Task ShouldHandleEmptyInput()
+    [Fact(DisplayName = "Should handle empty input ")]
+    public async Task ShouldHandleEmptyInput()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { }
                 }
-            };
-            // Assert
-            Assert.Throws<ArgumentException>(() => operation.Calculate(request));
-        }
+            }
+        };
+        // Assert
+        Assert.Throws<ArgumentException>(() => _operation.Calculate(request));
+    }
 
-        [Fact(DisplayName = "Should throw exception different format input ")]
-        public async Task ShouldThrowExceptionDifferentFormatInput()
+    [Fact(DisplayName = "Should throw exception different format input ")]
+    public async Task ShouldThrowExceptionDifferentFormatInput()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string>() { "1", "abc" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string>() { "1", "abc" }
                 }
-            };
-            Assert.Throws<FormatException>(() => operation.Calculate(request));
-        }
+            }
+        };
+        Assert.Throws<FormatException>(() => _operation.Calculate(request));
+    }
 
-        [Fact(DisplayName = "Should throw exception invalid operation ")]
-        public async Task ShouldThrowExceptionInvalidOperation()
+    [Fact(DisplayName = "Should throw exception invalid operation ")]
+    public async Task ShouldThrowExceptionInvalidOperation()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = "InvalidOperation",
-                        Value = new List<string>() { "1", "2" }
-                    }
+                    ID = "InvalidOperation",
+                    Value = new List<string>() { "1", "2" }
                 }
-            };
-            // Assert
-            Assert.Throws<InvalidOperationException>(() => operation.Calculate(request));
-        }
+            }
+        };
+        // Assert
+        Assert.Throws<InvalidOperationException>(() => _operation.Calculate(request));
+    }
 
-        [Fact(DisplayName = "Should throw exception null input ")]
-        public async Task ShouldThrowExceptionNullInput()
+    [Fact(DisplayName = "Should throw exception null input ")]
+    public async Task ShouldThrowExceptionNullInput()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
-                {
-                    Operation = null
-                }
-            };
-            // Assert
-            Assert.Throws<NullReferenceException>(() => operation.Calculate(request));
-        }
+                Operation = null
+            }
+        };
+        // Assert
+        Assert.Throws<NullReferenceException>(() => _operation.Calculate(request));
+    }
 
-        [Fact(DisplayName = "Should calculate leading zeros ")]
-        public async Task ShouldCalculateLeadingZeros()
+    [Fact(DisplayName = "Should calculate leading zeros ")]
+    public async Task ShouldCalculateLeadingZeros()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "0003", "0002" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "0003", "0002" }
                 }
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(1.5, result);
-        }
-        [Fact(DisplayName = "Should calculate trailing zeros ")]
-        public async Task ShouldCalculateTrailingZeros()
+            }
+        };
+        // Act
+        double result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(1.5, result);
+    }
+    [Fact(DisplayName = "Should calculate trailing zeros ")]
+    public async Task ShouldCalculateTrailingZeros()
+    {
+        // Arrange
+        var request = new CalculatorRequest
         {
-            // Arrange
-            CalculatorRequest request = new CalculatorRequest
+            Maths = new Maths
             {
-                Maths = new Maths
+                Operation = new Operation
                 {
-                    Operation = new Operation
-                    {
-                        ID = nameof(Operator.Division),
-                        Value = new List<string> { "3.00", "2.00" }
-                    }
+                    ID = nameof(Operator.Division),
+                    Value = new List<string> { "3.00", "2.00" }
                 }
-            };
-            // Act
-            double result = operation.Calculate(request);
-            // Assert
-            Assert.Equal(1.5, result);
-        }
-
+            }
+        };
+        // Act
+        double result = _operation.Calculate(request);
+        // Assert
+        Assert.Equal(1.5, result);
     }
 }

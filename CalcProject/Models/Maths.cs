@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CalculatorProject.Models
+namespace CalculatorProject.Models;
+
+public class Maths
 {
-    public class Maths
-    {
-        [JsonPropertyName("MyOperation")]
-        public Operation? Operation { get; set; }
-    }
+    [JsonPropertyName("MyOperation")]
+    public Operation? Operation { get; set; }
 }
+
