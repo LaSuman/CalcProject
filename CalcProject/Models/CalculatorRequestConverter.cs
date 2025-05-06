@@ -13,7 +13,7 @@ namespace CalculatorProject.Models
             {
                 Maths = new Maths
                 {
-                    Operation = ConvertOperation(xml.Maths?.Operation)
+                    Operation = ConvertOperation(xml.Operation)
                 }
             };
         }
@@ -27,7 +27,9 @@ namespace CalculatorProject.Models
             {
                 ID = xmlOperation.ID,
                 Value = xmlOperation.Value,
-                NestedOperation = ConvertOperation(xmlOperation.NestedOperation)
+                NestedOperation = xmlOperation.NestedOperation != null && xmlOperation.NestedOperation.Any()
+                    ? ConvertOperation(xmlOperation.NestedOperation.First()) // Fix: Convert the first nested operation instead of assigning a list
+                    : null
             };
         }
     }
