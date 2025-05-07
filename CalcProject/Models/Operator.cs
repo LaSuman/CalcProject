@@ -5,6 +5,7 @@ public enum Operator
     Plus,
     Subtraction,
     Multiplication,
-    Division
+    Division,
+    Exponential
 }
 

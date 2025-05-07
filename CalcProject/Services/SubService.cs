@@ -1,4 +1,5 @@
-﻿using CalculatorProject.Models;
+﻿using CalculatorProject.Controllers;
+using CalculatorProject.Models;
 
 namespace CalculatorProject.Services
 {
@@ -37,6 +38,7 @@ namespace CalculatorProject.Services
                     nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
                     nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
                     nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Exponential) => new ExpService().Calculate(calculatorRequest.NestedOperation),
                     _ => throw new ArgumentOutOfRangeException()
                 };
                 sub += nestedResult;

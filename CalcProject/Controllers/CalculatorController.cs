@@ -22,6 +22,7 @@ public class CalculatorController : ControllerBase
                 nameof(Operator.Subtraction) => new SubService().Calculate(request),
                 nameof(Operator.Multiplication) => new MulService().Calculate(request),
                 nameof(Operator.Division) => new DivService().Calculate(request),
+                nameof(Operator.Exponential) => new ExpService().Calculate(request),
                 _ => throw new ArgumentOutOfRangeException()
             };
             return Ok(new CustomResponse
@@ -59,6 +60,7 @@ public class CalculatorController : ControllerBase
                 nameof(Operator.Subtraction) => new SubService().Calculate(request),
                 nameof(Operator.Multiplication) => new MulService().Calculate(request),
                 nameof(Operator.Division) => new DivService().Calculate(request),
+                nameof(Operator.Exponential) => new ExpService().Calculate(request),
                 _ => throw new ArgumentOutOfRangeException()
             };
             return Ok(new CustomResponse

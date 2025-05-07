@@ -1,4 +1,5 @@
-﻿using CalculatorProject.Models;
+﻿using CalculatorProject.Controllers;
+using CalculatorProject.Models;
 
 namespace CalculatorProject.Services;
 
@@ -26,7 +27,7 @@ public class MulService : IOperation
             var value = double.Parse(calculatorRequest.Value[i]);
             mul *= value;
         }
-        if (calculatorRequest.Value.Count == 1)
+        if (calculatorRequest.Value.Count == 1 && calculatorRequest.NestedOperation == null)
             mul = 0;
 
         // Handle nested calculation, if present.
@@ -37,6 +38,7 @@ public class MulService : IOperation
             nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
             nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
             nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
+            nameof(Operator.Exponential) => new ExpService().Calculate(calculatorRequest.NestedOperation),
             _ => throw new ArgumentOutOfRangeException()
         };
         mul += nestedResult;

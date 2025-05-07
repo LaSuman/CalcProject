@@ -1,4 +1,5 @@
-﻿using CalculatorProject.Models;
+﻿using CalculatorProject.Controllers;
+using CalculatorProject.Models;
 
 namespace CalculatorProject.Services
 {
@@ -28,7 +29,7 @@ namespace CalculatorProject.Services
                 var value = double.Parse(calculatorRequest.Value[i] ?? string.Empty);
                 div /= value;
             }
-            if (calculatorRequest.Value.Count == 1)
+            if (calculatorRequest.Value.Count == 1 && calculatorRequest.NestedOperation == null)
                 throw new DivideByZeroException("Cannot divide by zero.");
 
 
@@ -40,6 +41,7 @@ namespace CalculatorProject.Services
                 nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
                 nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
                 nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Exponential) => new ExpService().Calculate(calculatorRequest.NestedOperation),
                 _ => throw new ArgumentOutOfRangeException()
             };
             div += nestedResult;
