@@ -1,4 +1,5 @@
-﻿using CalculatorProject.Models;
+﻿using System.Globalization;
+using CalculatorProject.Models;
 
 namespace CalculatorProject.Services;
 
@@ -20,10 +21,10 @@ internal class ExpService(ILogger logger) : BaseService()
             throw new InvalidOperationException("Exponential requires exactly two operands.");
         if (op.Value[0] == "e" || op.Value[0] == "E")
         {
-            op.Value[0] = 2.718281828459045.ToString(); 
+            op.Value[0] = 2.718281828459045.ToString(CultureInfo.CurrentCulture); 
         }
-        var baseNum = double.Parse(op.Value[0]);
-        var exponent = double.Parse(op.Value[1]);
+        var baseNum = double.Parse(op.Value[0] ?? string.Empty);
+        var exponent = double.Parse(op.Value[1] ?? string.Empty);
 
         return Math.Pow(baseNum, exponent);
     }

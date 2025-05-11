@@ -55,7 +55,7 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
 
         if (element.TryGetProperty("MyOperation", out var nested) || element.TryGetProperty("Operation", out nested))
         {
-            op.NestedOperation = new List<Operation> { ParseOperation(nested) }; // Fix: Wrap the single Operation in a List
+            op.NestedOperation = [ParseOperation(nested)];
         }
 
         return op;
