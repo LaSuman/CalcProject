@@ -2,7 +2,6 @@
 using CalculatorProject.Models;
 
 namespace CalculatorProject.Services;
-
 public class MulService(ILogger logger) : BaseService()
 {
     public override double Calculate(CalculatorRequest calculatorRequest)
@@ -14,41 +13,38 @@ public class MulService(ILogger logger) : BaseService()
 
         if (calculatorRequest.Maths.Operation.ID != nameof(Operator.Multiplication))
             throw new InvalidOperationException();
-        var mul = Calculate(calculatorRequest.Maths.Operation);
-        return mul;
-    }
 
+        return Calculate(calculatorRequest.Maths.Operation);
+    }
 
     public double Calculate(Operation calculatorRequest)
     {
-        var mul = double.Parse(calculatorRequest.Value?[0] ?? string.Empty);
+        double mul = 1;
 
+        // Handle direct values (including "e")
         if (calculatorRequest.Value != null)
-            for (var i = 1; i < calculatorRequest.Value.Count; i++)
+        {
+            mul = calculatorRequest.Value.Aggregate(mul, (current, value) => current * ParseValue(value));
+        }
+
+        // Handle nested operations
+        if (calculatorRequest.NestedOperation != null)
+        {
+            foreach (var nestedOperation in calculatorRequest.NestedOperation)
             {
-                var value = double.Parse(calculatorRequest.Value[i] ?? string.Empty);
-                mul *= value;
+                var nestedResult = nestedOperation.ID switch
+                {
+                    nameof(Operator.Plus) => new AddService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Subtraction) => new SubService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Multiplication) => new MulService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Division) => new DivService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Exponential) => new ExpService(logger).Calculate(nestedOperation),
+                    _ => throw new ArgumentOutOfRangeException($"Unsupported operator: {nestedOperation.ID}")
+                };
+
+                mul *= nestedResult; // Multiply nested result
             }
-
-        if (calculatorRequest is { Value: { Count: 1 }, NestedOperation: null })
-            mul = 0;
-
-        // Handle nested calculation, if present.
-        if (calculatorRequest.NestedOperation == null) return mul;
-
-        double sum = 0;
-        foreach (var nestedOperation in calculatorRequest.NestedOperation)
-            sum += nestedOperation.ID switch
-            {
-                nameof(Operator.Plus) => new AddService(logger).Calculate((Operation)nestedOperation),
-                nameof(Operator.Subtraction) => new SubService(logger).Calculate((Operation)nestedOperation),
-                nameof(Operator.Multiplication) => new MulService(logger).Calculate((Operation)nestedOperation),
-                nameof(Operator.Division) => new DivService(logger).Calculate((Operation)nestedOperation),
-                nameof(Operator.Exponential) => new ExpService(logger).Calculate((Operation)nestedOperation),
-                _ => throw new ArgumentOutOfRangeException { HelpLink = null, HResult = 0, Source = null }
-            };
-
-        mul += sum;
+        }
 
         return mul;
     }

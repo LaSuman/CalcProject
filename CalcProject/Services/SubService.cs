@@ -36,19 +36,15 @@ namespace CalculatorProject.Services
             // Handle nested calculation, if present.
             if (calculatorRequest.NestedOperation == null) return sub;
 
-            double sum = 0;
-            foreach (var nestedOperation in calculatorRequest.NestedOperation)
-                sum += nestedOperation.ID switch
-                {
-                    nameof(Operator.Plus) => new AddService(logger).Calculate((Operation)nestedOperation),
-                    nameof(Operator.Subtraction) => new SubService(logger).Calculate((Operation)nestedOperation),
-                    nameof(Operator.Multiplication) => new MulService(logger).Calculate((Operation)nestedOperation),
-                    nameof(Operator.Division) => new DivService(logger).Calculate((Operation)nestedOperation),
-                    nameof(Operator.Exponential) => new ExpService(logger).Calculate((Operation)nestedOperation),
-                    _ => throw new ArgumentOutOfRangeException { HelpLink = null, HResult = 0, Source = null }
-                };
-
-            sub += sum;
+            sub += calculatorRequest.NestedOperation.Sum(nestedOperation => nestedOperation.ID switch
+            {
+                nameof(Operator.Plus) => new AddService(logger).Calculate(nestedOperation),
+                nameof(Operator.Subtraction) => new SubService(logger).Calculate(nestedOperation),
+                nameof(Operator.Multiplication) => new MulService(logger).Calculate(nestedOperation),
+                nameof(Operator.Division) => new DivService(logger).Calculate(nestedOperation),
+                nameof(Operator.Exponential) => new ExpService(logger).Calculate(nestedOperation),
+                _ => throw new ArgumentOutOfRangeException { HelpLink = null, HResult = 0, Source = null }
+            });
 
             return sub;
         }

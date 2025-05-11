@@ -28,12 +28,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
                 nameof(Operator.Multiplication) => new MulService(_logger).Calculate(request),
                 nameof(Operator.Division) => new DivService(_logger).Calculate(request),
                 nameof(Operator.Exponential) => new ExpService(_logger).Calculate(request),
-                _ => throw new ArgumentOutOfRangeException
-                {
-                    HelpLink = null,
-                    HResult = 0,
-                    Source = null
-                }
+                _ => throw new ArgumentOutOfRangeException()
             };
 
             _logger.LogInformation("Calculation successful. Result: {Result}", result);
@@ -99,12 +94,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
                 nameof(Operator.Multiplication) => new MulService(_logger).Calculate(request),
                 nameof(Operator.Division) => new DivService(_logger).Calculate(request),
                 nameof(Operator.Exponential) => new ExpService(_logger).Calculate(request),
-                _ => throw new ArgumentOutOfRangeException
-                {
-                    HelpLink = null,
-                    HResult = 0,
-                    Source = null
-                }
+                _ => throw new ArgumentOutOfRangeException()
             };
             _logger.LogInformation("Calculation successful. Result: {Result}", result);
              
