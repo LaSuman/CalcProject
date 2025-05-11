@@ -1,11 +1,21 @@
 ﻿using CalculatorProject.Models;
 using CalculatorProject.Services;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace CalculatorProject.Tests;
 
 public class SubServiceTest
 {
-    private readonly IOperation _operation = new SubService();
+
+    private readonly SubService _operation;
+
+    public SubServiceTest()
+    {
+        // Setup mock logger
+        var mockLogger = new Mock<ILogger<SubService>>();
+        _operation = new SubService(mockLogger.Object);
+    }
 
     [Fact(DisplayName = "Should sub two valid number")]
     public async Task ShouldSubTwoValidNumber()
@@ -250,5 +260,10 @@ public class SubServiceTest
         double result = _operation.Calculate(request);
         // Assert
         Assert.Equal(1.00, result);
+    }
+
+    public double Calculate(CalculatorRequest calculatorRequest)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,11 +1,20 @@
 ﻿using CalculatorProject.Models;
 using CalculatorProject.Services;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace CalculatorProject.Tests;
 
 public class AddServiceTest
 {
-    private readonly IOperation _operation = new AddService();
+    private readonly AddService _operation;
+
+    public AddServiceTest()
+    {
+        // Setup mock logger
+        var mockLogger = new Mock<ILogger<AddService>>();
+        _operation = new AddService(mockLogger.Object);
+    }
 
     [Fact(DisplayName = "Should add two valid number")]
     public async Task ShouldAddTwoValidNumber()
@@ -18,7 +27,7 @@ public class AddServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = ["2", "3"]
+                    Value = new List<string> { "2", "3" }
                 }
             }
         };
@@ -233,4 +242,5 @@ public class AddServiceTest
         // Assert
         Assert.Equal(5.00, result);
     }
+
 }

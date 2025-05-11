@@ -2,10 +2,12 @@
 
 namespace CalculatorProject.Services;
 
-internal class ExpService : IOperation
+internal class ExpService(ILogger logger) : BaseService()
 {
-    public double Calculate(CalculatorRequest calculatorRequest)
+    public override double Calculate(CalculatorRequest calculatorRequest)
     {
+        logger.LogInformation("Performing exponential for values: {Values}", calculatorRequest.Maths?.Operation?.Value);
+
         if (calculatorRequest?.Maths?.Operation == null)
             throw new ArgumentNullException(nameof(calculatorRequest), "CalculatorRequest, Maths, or Operation cannot be null.");
 

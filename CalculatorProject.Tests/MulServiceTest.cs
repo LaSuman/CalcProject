@@ -1,10 +1,20 @@
 ﻿using CalculatorProject.Models;
 using CalculatorProject.Services;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace CalculatorProject.Tests;
 public class MulServiceTest
 {
-    private readonly IOperation _operation = new MulService();
+
+    private readonly MulService _operation;
+
+    public MulServiceTest()
+    {
+        // Setup mock logger
+        var mockLogger = new Mock<ILogger<MulService>>();
+        _operation = new MulService(mockLogger.Object);
+    }
 
     [Fact(DisplayName = "Should return 10 when multiple 5 and 2")]
     public async Task ShouldReturn10WhenMultiple5And2()
@@ -273,5 +283,10 @@ public class MulServiceTest
         double result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.00, result);
+    }
+
+    public double Calculate(CalculatorRequest calculatorRequest)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -6,11 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
-    opts.JsonSerializerOptions.Converters.Add(new CalculatorRequestFlexibleConverter());
+    opts.JsonSerializerOptions.Converters.Add(
+        new CalculatorRequestFlexibleConverter(
+            builder.Services.BuildServiceProvider().GetRequiredService<ILogger<CalculatorRequestFlexibleConverter>>()
+        )
+    );
 }).AddXmlSerializerFormatters();  // Added XML serializer formatters
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// This line is usually there by default, but make sure:
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 

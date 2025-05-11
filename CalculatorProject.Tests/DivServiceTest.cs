@@ -1,11 +1,21 @@
 ﻿using CalculatorProject.Models;
 using CalculatorProject.Services;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace CalculatorProject.Tests;
 
 public class DivServiceTest
 {
-    private readonly IOperation _operation = new DivService();
+
+    private readonly DivService _operation;
+
+    public DivServiceTest()
+    {
+        // Setup mock logger
+        var mockLogger = new Mock<ILogger<DivService>>();
+        _operation = new DivService(mockLogger.Object);
+    }
 
     [Fact(DisplayName = "Should return 2 when divide 6 by 3")]
     public async Task ShouldRetun2WhenDivide6By3()

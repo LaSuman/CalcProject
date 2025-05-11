@@ -3,15 +3,19 @@ using CalculatorProject.Models;
 
 namespace CalculatorProject.Services
 {
-    public class DivService : IOperation
+    public class DivService(ILogger logger) : BaseService
     {
-        public double Calculate(CalculatorRequest calculatorRequest)
+        public override double Calculate(CalculatorRequest calculatorRequest)
         {
+            logger.LogInformation("Performing division for values: {Values}",
+                calculatorRequest.Maths?.Operation?.Value);
+
             if (calculatorRequest.Maths?.Operation == null)
                 throw new NullReferenceException();
 
             if (calculatorRequest.Maths.Operation.ID != nameof(Operator.Division))
                 throw new InvalidOperationException();
+
             double div = Calculate(calculatorRequest.Maths.Operation);
             return div;
         }
@@ -32,16 +36,15 @@ namespace CalculatorProject.Services
             if (calculatorRequest.Value.Count == 1 && calculatorRequest.NestedOperation == null)
                 throw new DivideByZeroException("Cannot divide by zero.");
 
-
             // Handle nested calculation, if present.
             if (calculatorRequest.NestedOperation == null) return div;
             var nestedResult = calculatorRequest.NestedOperation.ID switch
             {
-                nameof(Operator.Plus) => new AddService().Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Exponential) => new ExpService().Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Plus) => new AddService(logger).Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Subtraction) => new SubService(logger).Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Multiplication) => new MulService(logger).Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Division) => new DivService(logger).Calculate(calculatorRequest.NestedOperation),
+                nameof(Operator.Exponential) => new ExpService(logger).Calculate(calculatorRequest.NestedOperation),
                 _ => throw new ArgumentOutOfRangeException()
             };
             div += nestedResult;

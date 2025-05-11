@@ -5,6 +5,13 @@ namespace CalculatorProject.Models;
 
 public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorRequest>
 {
+    private readonly ILogger<CalculatorRequestFlexibleConverter> _logger;
+
+    public CalculatorRequestFlexibleConverter(ILogger<CalculatorRequestFlexibleConverter> logger)
+    {
+        _logger = logger;
+    }
+
     public override CalculatorRequest? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var doc = JsonDocument.ParseValue(ref reader);
@@ -30,9 +37,16 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
     private Operation ParseOperation(JsonElement element)
     {
         var op = new Operation();
-
-        if (element.TryGetProperty("@ID", out var id))
-            op.ID = id.GetString();
+        try
+        {
+            if (element.TryGetProperty("@ID", out var id))
+                op.ID = id.GetString();
+        }
+        catch (Exception fex)
+        {
+            _logger.LogWarning(fex, "Input format issue: {Message}", fex.Message);
+            throw new JsonException($"Input number format: {fex.Message}");
+        }
 
         if (element.TryGetProperty("Value", out var values))
         {

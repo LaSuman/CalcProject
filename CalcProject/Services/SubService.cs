@@ -3,10 +3,12 @@ using CalculatorProject.Models;
 
 namespace CalculatorProject.Services
 {
-    public class SubService : IOperation
+    public class SubService(ILogger logger) : BaseService
     {
-        public double Calculate(CalculatorRequest calculatorRequest)
+        public override double Calculate(CalculatorRequest calculatorRequest)
         {
+            logger.LogInformation("Performing subtraction for values: {Values}", calculatorRequest.Maths?.Operation?.Value);
+
             if (calculatorRequest.Maths?.Operation == null)
                 throw new NullReferenceException();
 
@@ -34,11 +36,11 @@ namespace CalculatorProject.Services
             {
                 var nestedResult = calculatorRequest.NestedOperation.ID switch
                 {
-                    nameof(Operator.Plus) => new AddService().Calculate(calculatorRequest.NestedOperation),
-                    nameof(Operator.Subtraction) => new SubService().Calculate(calculatorRequest.NestedOperation),
-                    nameof(Operator.Multiplication) => new MulService().Calculate(calculatorRequest.NestedOperation),
-                    nameof(Operator.Division) => new DivService().Calculate(calculatorRequest.NestedOperation),
-                    nameof(Operator.Exponential) => new ExpService().Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Plus) => new AddService(logger).Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Subtraction) => new SubService(logger).Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Multiplication) => new MulService(logger).Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Division) => new DivService(logger).Calculate(calculatorRequest.NestedOperation),
+                    nameof(Operator.Exponential) => new ExpService(logger).Calculate(calculatorRequest.NestedOperation),
                     _ => throw new ArgumentOutOfRangeException()
                 };
                 sub += nestedResult;
