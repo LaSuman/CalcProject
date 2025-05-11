@@ -34,18 +34,21 @@ public class MulService(ILogger logger) : BaseService()
 
         // Handle nested calculation, if present.
         if (calculatorRequest.NestedOperation == null) return mul;
-        var nestedResult = calculatorRequest.NestedOperation.ID switch
+
+        foreach (var nestedOperation in calculatorRequest.NestedOperation)
         {
-            nameof(Operator.Plus) => new AddService(logger).Calculate(calculatorRequest.NestedOperation),
-            nameof(Operator.Subtraction) => new SubService(logger).Calculate(calculatorRequest.NestedOperation),
-            nameof(Operator.Multiplication) => new MulService(logger).Calculate(calculatorRequest.NestedOperation),
-            nameof(Operator.Division) => new DivService(logger).Calculate(calculatorRequest.NestedOperation),
-            nameof(Operator.Exponential) => new ExpService(logger).Calculate(calculatorRequest.NestedOperation),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        mul += nestedResult;
+            var nestedResult = nestedOperation.ID switch
+            {
+                nameof(Operator.Plus) => new AddService(logger).Calculate(nestedOperation),
+                nameof(Operator.Subtraction) => new SubService(logger).Calculate(nestedOperation),
+                nameof(Operator.Multiplication) => new MulService(logger).Calculate(nestedOperation),
+                nameof(Operator.Division) => new DivService(logger).Calculate(nestedOperation),
+                nameof(Operator.Exponential) => new ExpService(logger).Calculate(nestedOperation),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            mul += nestedResult;
+        }
 
         return mul;
     }
 }
-

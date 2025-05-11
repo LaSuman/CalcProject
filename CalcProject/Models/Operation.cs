@@ -10,6 +10,6 @@ public class Operation
     public List<string> Value { get; set; }
 
     [JsonPropertyName("MyOperation")]
-    public Operation? NestedOperation { get; set; }
+    public List<Operation>? NestedOperation { get; set; } = new();
 
 }

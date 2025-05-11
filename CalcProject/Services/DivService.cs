@@ -33,21 +33,26 @@ namespace CalculatorProject.Services
                 var value = double.Parse(calculatorRequest.Value[i] ?? string.Empty);
                 div /= value;
             }
+
             if (calculatorRequest.Value.Count == 1 && calculatorRequest.NestedOperation == null)
                 throw new DivideByZeroException("Cannot divide by zero.");
 
             // Handle nested calculation, if present.
             if (calculatorRequest.NestedOperation == null) return div;
-            var nestedResult = calculatorRequest.NestedOperation.ID switch
+
+            foreach (var nestedOperation in calculatorRequest.NestedOperation)
             {
-                nameof(Operator.Plus) => new AddService(logger).Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Subtraction) => new SubService(logger).Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Multiplication) => new MulService(logger).Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Division) => new DivService(logger).Calculate(calculatorRequest.NestedOperation),
-                nameof(Operator.Exponential) => new ExpService(logger).Calculate(calculatorRequest.NestedOperation),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-            div += nestedResult;
+                var nestedResult = nestedOperation.ID switch
+                {
+                    nameof(Operator.Plus) => new AddService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Subtraction) => new SubService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Multiplication) => new MulService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Division) => new DivService(logger).Calculate(nestedOperation),
+                    nameof(Operator.Exponential) => new ExpService(logger).Calculate(nestedOperation),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                div += nestedResult;
+            }
 
             return div;
         }

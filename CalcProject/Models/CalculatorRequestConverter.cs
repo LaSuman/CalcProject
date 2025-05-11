@@ -17,17 +17,17 @@
 
         private static Operation? ConvertOperation(OperationXml? xmlOperation)
         {
-            //Conditional Operation
-            return xmlOperation == null
-                ? null
-                : new Operation
-                {
-                    ID = xmlOperation.ID,
+            if (xmlOperation == null)
+                return null;
+            return new Operation{
+
+            ID = xmlOperation.ID,
                     Value = xmlOperation.Value,
-                    NestedOperation = xmlOperation.NestedOperation != null && xmlOperation.NestedOperation.Any()
-                    ? ConvertOperation(xmlOperation.NestedOperation.First()) // Fix: Convert the first nested operation instead of assigning a list
-                    : null
-                };
+                NestedOperation = xmlOperation.NestedOperation?
+                    .Select(ConvertOperation)
+                    .Where(op => op != null)
+                    .ToList()
+            };
         }
     }
 }
