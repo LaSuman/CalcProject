@@ -21,12 +21,12 @@ public static class CalculatorRequestConverter
             return null;
         return new Operation
         {
-
             ID = xmlOperation.ID,
             Value = xmlOperation.Value,
             NestedOperation = xmlOperation.NestedOperation?
                 .Select(ConvertOperation)
                 .Where(op => op != null)
+                .Cast<Operation>() // Ensures the list contains only non-null values
                 .ToList()
         };
     }
