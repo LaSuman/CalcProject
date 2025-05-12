@@ -96,10 +96,8 @@ public class DivServiceTest
             }
 
         };
-        // Act
-        double result = _operation.Calculate(request);
         // Assert
-        Assert.Equal(double.PositiveInfinity, result);
+        Assert.Throws<DivideByZeroException>(() => _operation.Calculate(request));
     }
 
     [Fact(DisplayName = "Should div negative number ")]
@@ -184,7 +182,7 @@ public class DivServiceTest
             }
         };
         // Assert
-        Assert.Throws<ArgumentException>(() => _operation.Calculate(request));
+        Assert.Throws<DivideByZeroException>(() => _operation.Calculate(request));
     }
 
     [Fact(DisplayName = "Should throw exception different format input ")]

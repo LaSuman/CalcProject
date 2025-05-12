@@ -18,6 +18,9 @@ public class MulService(ILogger logger) : BaseService()
 
     public double Calculate(Operation calculatorRequest)
     {
+        if (calculatorRequest.Value == null || calculatorRequest.Value.Count == 0)
+            throw new ArgumentOutOfRangeException(nameof(calculatorRequest)); 
+
         double mul = 1;
 
         // Handle direct values (including "e")

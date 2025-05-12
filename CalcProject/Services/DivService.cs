@@ -20,18 +20,20 @@ public class DivService(ILogger logger) : BaseService
 
     public double Calculate(Operation calculatorRequest)
     {
-        if (calculatorRequest.Value is { Count: 0 })
-            throw new ArgumentException("Division requires at least two values.");
-        var div = double.Parse(calculatorRequest.Value?[0] ?? string.Empty);
-        if (div == 0)
-            throw new DivideByZeroException("Cannot divide by zero.");
+        if (calculatorRequest.Value == null || calculatorRequest.Value.Count < 2)
+            throw new DivideByZeroException("Division requires at least two values.");
 
-        if (calculatorRequest.Value != null)
-            for (var i = 1; i < calculatorRequest.Value.Count; i++)
-            {
-                var value = double.Parse(calculatorRequest.Value[i]);
-                div /= value;
-            }
+        double div = ParseValue(calculatorRequest.Value[0]);
+
+        for (int i = 1; i < calculatorRequest.Value.Count; i++)
+        {
+            double value = ParseValue(calculatorRequest.Value[i]);
+
+            if (value == 0)
+                throw new DivideByZeroException("Cannot divide by zero.");
+
+            div /= value;
+        }
 
         if (calculatorRequest is { Value: { Count: 1 }, NestedOperation: null })
             throw new DivideByZeroException("Cannot divide by zero.");

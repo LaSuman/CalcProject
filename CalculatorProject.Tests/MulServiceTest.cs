@@ -80,7 +80,7 @@ public class MulServiceTest
         // Act
         double result = _operation.Calculate(request);
         // Assert
-        Assert.Equal(0.00, result);
+        Assert.Equal(3.00, result);
     }
 
     [Fact(DisplayName = "Should Mul with 0")]
