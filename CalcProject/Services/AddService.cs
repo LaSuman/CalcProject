@@ -1,5 +1,4 @@
-﻿using CalculatorProject.Controllers;
-using CalculatorProject.Models;
+﻿using CalculatorProject.Models;
 
 namespace CalculatorProject.Services;
 
@@ -14,11 +13,8 @@ public class AddService(ILogger logger) : BaseService()
 
         if (calculatorRequest.Maths.Operation.ID != nameof(Operator.Plus))
             throw new InvalidOperationException();
-
-        double sum = 0;
-        sum = Calculate(calculatorRequest.Maths.Operation);
-
-        return sum;
+          
+        return Calculate(calculatorRequest.Maths.Operation); ;
     }
 
     public double Calculate(Operation calculatorRequest)

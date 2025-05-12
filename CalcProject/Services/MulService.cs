@@ -1,5 +1,4 @@
-﻿using CalculatorProject.Controllers;
-using CalculatorProject.Models;
+﻿using CalculatorProject.Models;
 
 namespace CalculatorProject.Services;
 public class MulService(ILogger logger) : BaseService()
@@ -28,24 +27,17 @@ public class MulService(ILogger logger) : BaseService()
         }
 
         // Handle nested operations
-        if (calculatorRequest.NestedOperation != null)
-        {
-            foreach (var nestedOperation in calculatorRequest.NestedOperation)
+        if (calculatorRequest.NestedOperation == null) return mul;
+
+        return calculatorRequest.NestedOperation.Select(nestedOperation => nestedOperation.ID switch
             {
-                var nestedResult = nestedOperation.ID switch
-                {
-                    nameof(Operator.Plus) => new AddService(logger).Calculate(nestedOperation),
-                    nameof(Operator.Subtraction) => new SubService(logger).Calculate(nestedOperation),
-                    nameof(Operator.Multiplication) => new MulService(logger).Calculate(nestedOperation),
-                    nameof(Operator.Division) => new DivService(logger).Calculate(nestedOperation),
-                    nameof(Operator.Exponential) => new ExpService(logger).Calculate(nestedOperation),
-                    _ => throw new ArgumentOutOfRangeException($"Unsupported operator: {nestedOperation.ID}")
-                };
-
-                mul *= nestedResult; // Multiply nested result
-            }
-        }
-
-        return mul;
+                nameof(Operator.Plus) => new AddService(logger).Calculate(nestedOperation),
+                nameof(Operator.Subtraction) => new SubService(logger).Calculate(nestedOperation),
+                nameof(Operator.Multiplication) => new MulService(logger).Calculate(nestedOperation),
+                nameof(Operator.Division) => new DivService(logger).Calculate(nestedOperation),
+                nameof(Operator.Exponential) => new ExpService(logger).Calculate(nestedOperation),
+                _ => throw new ArgumentOutOfRangeException($"Unsupported operator: {nestedOperation.ID}")
+            })
+            .Aggregate(mul, (current, nestedResult) => current * nestedResult);
     }
 }

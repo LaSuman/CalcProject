@@ -8,30 +8,33 @@ namespace CalculatorProject.Controllers;
 [ApiController]
 public class CalculatorController(ILogger<CalculatorController> logger) : ControllerBase
 {
-    private readonly ILogger<CalculatorController> _logger = logger;
-
     [HttpPost()]
-    [Route("CalculateJSON")]
+    [Route("CalculateJson")]
     [Produces("application/json")]
-    public IActionResult CalculateJSON([FromBody] CalculatorRequest request)
+    public IActionResult CalculateJson([FromBody] CalculatorRequest request)
     {
        
         try
         {
             var op = request.Maths?.Operation;
 
-            _logger.LogInformation("Received JSON calculation request for operator: {Operator}", op.ID);
-            var result = op.ID switch
+            logger.LogInformation("Received JSON calculation request for operator: {Operator}", op?.ID);
+            var result = op?.ID switch
             {
-                nameof(Operator.Plus) => new AddService(_logger).Calculate(request),
-                nameof(Operator.Subtraction) => new SubService(_logger).Calculate(request),
-                nameof(Operator.Multiplication) => new MulService(_logger).Calculate(request),
-                nameof(Operator.Division) => new DivService(_logger).Calculate(request),
-                nameof(Operator.Exponential) => new ExpService(_logger).Calculate(request),
-                _ => throw new ArgumentOutOfRangeException()
+                nameof(Operator.Plus) => new AddService(logger).Calculate(request),
+                nameof(Operator.Subtraction) => new SubService(logger).Calculate(request),
+                nameof(Operator.Multiplication) => new MulService(logger).Calculate(request),
+                nameof(Operator.Division) => new DivService(logger).Calculate(request),
+                nameof(Operator.Exponential) => new ExpService(logger).Calculate(request),
+                _ => throw new ArgumentOutOfRangeException
+                {
+                    HelpLink = null,
+                    HResult = 0,
+                    Source = null
+                }
             };
 
-            _logger.LogInformation("Calculation successful. Result: {Result}", result);
+            logger.LogInformation("Calculation successful. Result: {Result}", result);
 
             return Ok(new CustomResponse
             { 
@@ -42,7 +45,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
         }
         catch (FormatException fex)
         {
-            _logger.LogWarning(fex, "Number format issue: {Message}", fex.Message);
+            logger.LogWarning(fex, "Number format issue: {Message}", fex.Message);
             return BadRequest(new CustomResponse
             {
                 Success = false,
@@ -52,7 +55,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
         }
         catch (DivideByZeroException dbz)
         {
-            _logger.LogWarning(dbz, "Division by zero occurred.");
+            logger.LogWarning(dbz, "Division by zero occurred.");
             return BadRequest(new CustomResponse
             {
                 Success = false,
@@ -62,7 +65,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected error occurred during calculation.");
+            logger.LogError(ex, "Unexpected error occurred during calculation.");
             return BadRequest(new CustomResponse
             {
                 Success = false,
@@ -74,10 +77,10 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
 
 
     [HttpPost()]
-    [Route("CalculateXML")]
+    [Route("CalculateXml")]
     [Consumes("application/xml")]
     [Produces("application/xml")]
-    public Task<IActionResult> CalculateXML([FromBody] CalculatorRequestXml xmlRequest)
+    public Task<IActionResult> CalculateXml([FromBody] CalculatorRequestXml xmlRequest)
     {
 
         try
@@ -85,18 +88,18 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
             var request = xmlRequest.ToCalculatorRequest();
             var op = request.Maths?.Operation;
 
-            _logger.LogInformation("Received XML calculation request for operator: {Operator}", op?.ID);
+            logger.LogInformation("Received XML calculation request for operator: {Operator}", op?.ID);
 
             var result = op?.ID switch
             {
-                nameof(Operator.Plus) => new AddService(_logger).Calculate(request),
-                nameof(Operator.Subtraction) => new SubService(_logger).Calculate(request),
-                nameof(Operator.Multiplication) => new MulService(_logger).Calculate(request),
-                nameof(Operator.Division) => new DivService(_logger).Calculate(request),
-                nameof(Operator.Exponential) => new ExpService(_logger).Calculate(request),
+                nameof(Operator.Plus) => new AddService(logger).Calculate(request),
+                nameof(Operator.Subtraction) => new SubService(logger).Calculate(request),
+                nameof(Operator.Multiplication) => new MulService(logger).Calculate(request),
+                nameof(Operator.Division) => new DivService(logger).Calculate(request),
+                nameof(Operator.Exponential) => new ExpService(logger).Calculate(request),
                 _ => throw new ArgumentOutOfRangeException()
             };
-            _logger.LogInformation("Calculation successful. Result: {Result}", result);
+            logger.LogInformation("Calculation successful. Result: {Result}", result);
              
             return Task.FromResult<IActionResult>(Ok(new CustomResponse
             {
@@ -108,7 +111,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
 
         catch (FormatException fex)
         {
-            _logger.LogWarning(fex, "Number format issue: {Message}", fex.Message);
+            logger.LogWarning(fex, "Number format issue: {Message}", fex.Message);
             return Task.FromResult<IActionResult>(BadRequest(new CustomResponse
             {
                 Success = false,
@@ -118,7 +121,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
         }
         catch (DivideByZeroException dbz)
         {
-            _logger.LogWarning(dbz, "Division by zero occurred.");
+            logger.LogWarning(dbz, "Division by zero occurred.");
             return Task.FromResult<IActionResult>(BadRequest(new CustomResponse
             {
                 Success = false,
@@ -128,7 +131,7 @@ public class CalculatorController(ILogger<CalculatorController> logger) : Contro
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected error occurred during calculation.");
+            logger.LogError(ex, "Unexpected error occurred during calculation.");
             return Task.FromResult<IActionResult>(BadRequest(new CustomResponse
             {
                 Success = false,

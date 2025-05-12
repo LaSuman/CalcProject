@@ -3,15 +3,9 @@ using System.Text.Json;
 
 namespace CalculatorProject.Models;
 
-public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorRequest>
+public class CalculatorRequestFlexibleConverter(ILogger<CalculatorRequestFlexibleConverter> logger)
+    : JsonConverter<CalculatorRequest>
 {
-    private readonly ILogger<CalculatorRequestFlexibleConverter> _logger;
-
-    public CalculatorRequestFlexibleConverter(ILogger<CalculatorRequestFlexibleConverter> logger)
-    {
-        _logger = logger;
-    }
-
     public override CalculatorRequest? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var doc = JsonDocument.ParseValue(ref reader);
@@ -20,15 +14,16 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
         var result = new CalculatorRequest();
 
         // Try to find either "MyMaths" or "Maths"
-        if (root.TryGetProperty("MyMaths", out var mathsElement) || root.TryGetProperty("Maths", out mathsElement))
-        {
-            result.Maths = new Maths();
+        if (!root.TryGetProperty("MyMaths", out var mathsElement) &&
+            !root.TryGetProperty("Maths", out mathsElement)) 
+            return result;
+
+        result.Maths = new Maths();
              
-            // Try to find either "MyOperation" or "Operation"
-            if (mathsElement.TryGetProperty("MyOperation", out var operationElement) || mathsElement.TryGetProperty("Operation", out operationElement))
-            {
-                result.Maths.Operation = ParseOperation(operationElement);
-            }
+        // Try to find either "MyOperation" or "Operation"
+        if (mathsElement.TryGetProperty("MyOperation", out var operationElement) || mathsElement.TryGetProperty("Operation", out operationElement))
+        {
+            result.Maths.Operation = ParseOperation(operationElement);
         }
 
         return result;
@@ -45,7 +40,7 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
         }
         catch (Exception fex)
         {
-            _logger.LogWarning(fex, "Input format issue: {Message}", fex.Message);
+            logger.LogWarning(fex, "Input format issue: {Message}", fex.Message);
             throw new JsonException($"Input number format: {fex.Message}");
         }
 
@@ -54,19 +49,19 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
             op.Value = values.EnumerateArray().Select(v => v.GetString() ?? "").ToList();
         }
 
-        if (element.TryGetProperty("NestedOperation", out var nested) || element.TryGetProperty("MyOperation", out nested) || 
-            element.TryGetProperty("Operation", out nested))
+        if (!element.TryGetProperty("NestedOperation", out var nested) &&
+            !element.TryGetProperty("MyOperation", out nested) &&
+            !element.TryGetProperty("Operation", out nested)) return op;
+
+        if (nested.ValueKind == JsonValueKind.Array)
         {
-            if (nested.ValueKind == JsonValueKind.Array)
-            {
-                op.NestedOperation = nested.EnumerateArray()
-                    .Select(ParseOperation)
-                    .ToList();
-            }
-            else
-            {
-                op.NestedOperation = [ParseOperation(nested)];
-            }
+            op.NestedOperation = nested.EnumerateArray()
+                .Select(ParseOperation)
+                .ToList();
+        }
+        else
+        {
+            op.NestedOperation = [ParseOperation(nested)];
         }
         return op;
     }
