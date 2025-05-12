@@ -20,14 +20,14 @@ public class AddServiceTest
     public async Task ShouldAddTwoValidNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { "2", "3" }
+                    Value = ["2", "3"]
                 }
             }
         };
@@ -42,14 +42,14 @@ public class AddServiceTest
     public async Task ShouldAddOneValidNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { "3" }
+                    Value = ["3"]
                 }
             }
 
@@ -64,20 +64,20 @@ public class AddServiceTest
     public async Task ShouldAddWith0()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { "6", "0" }
+                    Value = ["6", "0"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.00, result);
     }
@@ -87,20 +87,20 @@ public class AddServiceTest
     public async Task ShouldAddNegativeNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { "-3", "-10" }
+                    Value = ["-3", "-10"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(-13.00, result);
     }
@@ -109,14 +109,14 @@ public class AddServiceTest
     public async Task ShouldHandleLargeNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { "30000000", "1000000" }
+                    Value = ["30000000", "1000000"]
                 }
             }
 
@@ -131,19 +131,19 @@ public class AddServiceTest
     public async Task ShouldHandleDecimalNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { "3.5", "2.5" }
+                    Value = ["3.5", "2.5"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.00, result);
     }
@@ -152,19 +152,19 @@ public class AddServiceTest
     public async Task ShouldHandleEmptyInput()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { }
+                    Value = []
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(0.00, result);
     }
@@ -173,14 +173,14 @@ public class AddServiceTest
     public async Task ShouldThrowExceptionDifferentFormatInput()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string>() { "1", "abc" }
+                    Value = ["1", "abc"]
                 }
             }
         };
@@ -199,7 +199,7 @@ public class AddServiceTest
                 Operation = new Operation
                 {
                     ID = "InvalidOperation",
-                    Value = new List<string>() { "1", "2" }
+                    Value = ["1", "2"]
                 }
             }
         };
@@ -211,7 +211,7 @@ public class AddServiceTest
     public async Task ShouldThrowExceptionNullInput()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
@@ -226,21 +226,20 @@ public class AddServiceTest
     public async Task ShouldCalculateLeadingZeros()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Plus),
-                    Value = new List<string> { "0003", "0002" }
+                    Value = ["0003", "0002"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(5.00, result);
     }
-
 }

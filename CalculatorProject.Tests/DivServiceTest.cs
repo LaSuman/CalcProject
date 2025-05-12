@@ -42,20 +42,20 @@ public class DivServiceTest
     public async Task ShouldDivTwoValidNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "6", "2" }
+                    Value = ["6", "2"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(3.00, result);
     }
@@ -71,7 +71,7 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "3" }
+                    Value = ["3"]
                 }
             }
 
@@ -91,7 +91,7 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "6", "0" }
+                    Value = ["6", "0"]
                 }
             }
 
@@ -111,13 +111,13 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "-30", "-3" }
+                    Value = ["-30", "-3"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(10.00, result);
     }
@@ -133,13 +133,13 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "3000000", "1000000" }
+                    Value = ["3000000", "1000000"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(3, result);
     }
@@ -155,7 +155,7 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "15.0", "1.5" }
+                    Value = ["15.0", "1.5"]
                 }
             }
         };
@@ -177,7 +177,7 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { }
+                    Value = []
                 }
             }
         };
@@ -196,7 +196,7 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string>() { "1", "abc" }
+                    Value = ["1", "abc"]
                 }
             }
         };
@@ -214,7 +214,7 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = "InvalidOperation",
-                    Value = new List<string>() { "1", "2" }
+                    Value = ["1", "2"]
                 }
             }
         };
@@ -248,12 +248,12 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "0003", "0002" }
+                    Value = ["0003", "0002"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(1.5, result);
     }
@@ -268,12 +268,12 @@ public class DivServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Division),
-                    Value = new List<string> { "3.00", "2.00" }
+                    Value = ["3.00", "2.00"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(1.5, result);
     }

@@ -1,5 +1,6 @@
 ﻿using CalculatorProject.Models;
 using CalculatorProject.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -28,13 +29,13 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "3", "2" }
+                    Value = ["3", "2"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(1.00, result);
     }
@@ -50,13 +51,13 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "3" }
+                    Value = ["3"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(3.00, result);
     }
@@ -72,13 +73,13 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "6", "0" }
+                    Value = ["6", "0"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.00, result);
     }
@@ -94,13 +95,13 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "-3", "-10" }
+                    Value = ["-3", "-10"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(7.00, result);
     }
@@ -116,13 +117,13 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "3000000", "1000000" }
+                    Value = ["3000000", "1000000"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(2000000.00, result);
     }
@@ -138,12 +139,12 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "3.5", "2.5" }
+                    Value = ["3.5", "2.5"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(1.00, result);
     }
@@ -160,7 +161,7 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { }
+                    Value = []
                 }
             }
         };
@@ -179,7 +180,7 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string>() { "1", "abc" }
+                    Value = ["1", "abc"]
                 }
             }
         };
@@ -198,7 +199,7 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = "InvalidOperation",
-                    Value = new List<string>() { "1", "2" }
+                    Value = ["1", "2"]
                 }
             }
         };
@@ -232,12 +233,12 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "0003", "0002" }
+                    Value = ["0003", "0002"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(1.00, result);
     }
@@ -252,18 +253,13 @@ public class SubServiceTest
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Subtraction),
-                    Value = new List<string> { "3.00", "2.00" }
+                    Value = ["3.00", "2.00"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(1.00, result);
-    }
-
-    public double Calculate(CalculatorRequest calculatorRequest)
-    {
-        throw new NotImplementedException();
     }
 }

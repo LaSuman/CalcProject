@@ -21,7 +21,7 @@ public class MulServiceTest
     {
 
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
@@ -43,20 +43,20 @@ public class MulServiceTest
     public async Task ShouldMulTwoValidNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "3", "2" }
+                    Value = ["3", "2"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.00, result);
     }
@@ -65,20 +65,20 @@ public class MulServiceTest
     public async Task ShouldMulOneValidNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "3" }
+                    Value = ["3"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(3.00, result);
     }
@@ -87,20 +87,20 @@ public class MulServiceTest
     public async Task ShouldMulWith0()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "6", "0" }
+                    Value = ["6", "0"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(0.00, result);
     }
@@ -109,20 +109,20 @@ public class MulServiceTest
     public async Task ShouldMulNegativeNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "-3", "-10" }
+                    Value = ["-3", "-10"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(30.00, result);
     }
@@ -131,20 +131,20 @@ public class MulServiceTest
     public async Task ShouldHandleLargeNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "3000000", "1000000" }
+                    Value = ["3000000", "1000000"]
                 }
             }
 
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(3000000000000.00, result);
     }
@@ -153,19 +153,19 @@ public class MulServiceTest
     public async Task ShouldHandleDecimalNumber()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "2.5", "2.5" }
+                    Value = ["2.5", "2.5"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.25, result);
     }
@@ -175,14 +175,14 @@ public class MulServiceTest
     public async Task ShouldHandleEmptyInput()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { }
+                    Value = []
                 }
             }
         };
@@ -194,14 +194,14 @@ public class MulServiceTest
     public async Task ShouldThrowExceptionDifferentFormatInput()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string>() { "1", "abc" }
+                    Value = ["1", "abc"]
                 }
             }
         };
@@ -213,14 +213,14 @@ public class MulServiceTest
     public async Task ShouldThrowExceptionInvalidOperation()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = "InvalidOperation",
-                    Value = new List<string>() { "1", "2" }
+                    Value = ["1", "2"]
                 }
             }
         };
@@ -232,7 +232,7 @@ public class MulServiceTest
     public async Task ShouldThrowExceptionNullInput()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
@@ -247,20 +247,20 @@ public class MulServiceTest
     [Fact(DisplayName = "Should calculate leading zeros ")]
     public async Task ShouldCalculateLeadingZeros()
     {
-        // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        // Arrange  
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "0003", "0002" }
+                    Value = ["0003", "0002"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.00, result);
     }
@@ -268,25 +268,20 @@ public class MulServiceTest
     public async Task ShouldCalculateTrailingZeros()
     {
         // Arrange
-        CalculatorRequest request = new CalculatorRequest
+        var request = new CalculatorRequest
         {
             Maths = new Maths
             {
                 Operation = new Operation
                 {
                     ID = nameof(Operator.Multiplication),
-                    Value = new List<string> { "3.00", "2.00" }
+                    Value = ["3.00", "2.00"]
                 }
             }
         };
         // Act
-        double result = _operation.Calculate(request);
+        var result = _operation.Calculate(request);
         // Assert
         Assert.Equal(6.00, result);
-    }
-
-    public double Calculate(CalculatorRequest calculatorRequest)
-    {
-        throw new NotImplementedException();
     }
 }

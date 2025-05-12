@@ -23,11 +23,11 @@ public class DivService(ILogger logger) : BaseService
         if (calculatorRequest.Value == null || calculatorRequest.Value.Count < 2)
             throw new DivideByZeroException("Division requires at least two values.");
 
-        double div = ParseValue(calculatorRequest.Value[0]);
+        var div = ParseValue(calculatorRequest.Value[0]);
 
-        for (int i = 1; i < calculatorRequest.Value.Count; i++)
+        for (var i = 1; i < calculatorRequest.Value.Count; i++)
         {
-            double value = ParseValue(calculatorRequest.Value[i]);
+            var value = ParseValue(calculatorRequest.Value[i]);
 
             if (value == 0)
                 throw new DivideByZeroException("Cannot divide by zero.");
