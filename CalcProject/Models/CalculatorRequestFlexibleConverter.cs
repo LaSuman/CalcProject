@@ -23,7 +23,7 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
         if (root.TryGetProperty("MyMaths", out var mathsElement) || root.TryGetProperty("Maths", out mathsElement))
         {
             result.Maths = new Maths();
-
+             
             // Try to find either "MyOperation" or "Operation"
             if (mathsElement.TryGetProperty("MyOperation", out var operationElement) || mathsElement.TryGetProperty("Operation", out operationElement))
             {
@@ -39,7 +39,8 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
         var op = new Operation();
         try
         {
-            if (element.TryGetProperty("@ID", out var id))
+            if (element.TryGetProperty("@ID", out var id) || element.TryGetProperty("ID", out id))
+
                 op.ID = id.GetString();
         }
         catch (Exception fex)
@@ -53,11 +54,20 @@ public class CalculatorRequestFlexibleConverter : JsonConverter<CalculatorReques
             op.Value = values.EnumerateArray().Select(v => v.GetString() ?? "").ToList();
         }
 
-        if (element.TryGetProperty("MyOperation", out var nested) || element.TryGetProperty("Operation", out nested))
+        if (element.TryGetProperty("NestedOperation", out var nested) || element.TryGetProperty("MyOperation", out nested) || 
+            element.TryGetProperty("Operation", out nested))
         {
-            op.NestedOperation = [ParseOperation(nested)];
+            if (nested.ValueKind == JsonValueKind.Array)
+            {
+                op.NestedOperation = nested.EnumerateArray()
+                    .Select(ParseOperation)
+                    .ToList();
+            }
+            else
+            {
+                op.NestedOperation = [ParseOperation(nested)];
+            }
         }
-
         return op;
     }
 
